@@ -15,7 +15,7 @@ struct Button {
 
 typedef struct Button Button;
 
-Button* Button_Create(const char* text, int x, int y, void (*on_click)(), SDL_Color color, SDL_Color hovering_color, SDL_Renderer* renderer);
+Button* Button_Create(const char* text, int x, int y, void (*on_click)(), TTF_Font* font, SDL_Color* color, SDL_Color* hovering_color, SDL_Renderer* renderer);
 void Button_SetPosition(Button* button, int x, int y);
 void Button_Draw(Button* button, SDL_Renderer* renderer);
 void Button_HandleEvent(Button *button, SDL_Event *event);

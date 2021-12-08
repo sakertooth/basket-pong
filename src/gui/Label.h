@@ -5,14 +5,15 @@
 struct Label {
     SDL_Rect rect;
     SDL_Texture* texture;
-    TTF_Font* const* font;
+    TTF_Font* active_font;
+    SDL_Renderer* active_renderer;
     SDL_Color color;
     char *text;
 };
 
 typedef struct Label Label;
 
-Label* Label_Create(const char *text, int x, int y, TTF_Font* const* font, const SDL_Color* color);
+Label* Label_Create(const char *text, int x, int y, TTF_Font* font, SDL_Color* color, SDL_Renderer* renderer);
 void Label_Draw(Label* label, SDL_Renderer* renderer);
 void Label_SetColor(Label* label, const SDL_Color* color);
 void Label_SetText(Label* label, const char* text);

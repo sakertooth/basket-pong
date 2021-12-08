@@ -1,18 +1,18 @@
 #include "Label.h"
 #include "Game.h"
 
-Label* Label_Create(const char *text, int x, int y, TTF_Font* const* font, const SDL_Color* color) {
+Label* Label_Create(const char *text, int x, int y, TTF_Font* font, SDL_Color* color, SDL_Renderer* renderer) {
     Label* label = malloc(sizeof(Label));
     if (label == NULL) {
         return NULL;
     }
 
-    SDL_Surface* surface = TTF_RenderText_Solid(*font, text, *color);
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text, *color);
     if (surface == NULL) {
         goto cleanup1;
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture == NULL) {
         goto cleanup2;
     }
@@ -23,7 +23,8 @@ Label* Label_Create(const char *text, int x, int y, TTF_Font* const* font, const
     }
 
     label->texture = texture;
-    label->font = font;
+    label->active_font = font;
+    label->active_renderer = renderer;
     label->color = *color;
     label->text = label_text;
 
@@ -49,12 +50,12 @@ void Label_Draw(Label* label, SDL_Renderer* renderer) {
 }
 
 void Label_Configure(Label* label, const char *text, const SDL_Color* color) {
-    SDL_Surface* surface = TTF_RenderText_Solid(*label->font, text, *color);
+    SDL_Surface* surface = TTF_RenderText_Solid(label->active_font, text, *color);
     if (surface == NULL) {
         return;
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(label->active_renderer, surface);
     if (texture == NULL) {
         SDL_FreeSurface(surface);
         return;

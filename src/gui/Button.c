@@ -1,33 +1,31 @@
 #include "Button.h"
 #include "Game.h"
 
-Button* Button_Create(const char* text, int x, int y, void (*on_click)(), SDL_Color color, SDL_Color hovering_color, SDL_Renderer* renderer) {
+Button* Button_Create(const char* text, int x, int y, void (*on_click)(), TTF_Font* font, SDL_Color* color, SDL_Color* hovering_color, SDL_Renderer* renderer) {
     Button* button = malloc(sizeof(Button));
     if (button == NULL) {
         return NULL;
     }
 
-    button->label = Label_Create(text, x, y, game->fonts->large_font, renderer, hovering_color);
+    button->label = Label_Create(text, x, y, font, hovering_color, renderer);
     if (button->label == NULL) {
         free(button);
         return NULL;
     }
 
+    button->on_click = on_click;
+    button->color = *color;
+    button->hovering_color = *hovering_color;
+    button->hovering = SDL_FALSE;
+    button->clicked = SDL_FALSE;
+
+    button->label->rect.x = button->rect.x + (button->rect.w - button->label->rect.w) / 2;
+    button->label->rect.y = button->rect.y + (button->rect.h - button->label->rect.h) / 2;
+
     button->rect.x = x;
     button->rect.y = y;
     button->rect.w = button->label->rect.w + 50;
     button->rect.h = button->label->rect.h + 15;
-
-    int label_x = button->rect.x + (button->rect.w - button->label->rect.w) / 2;
-    int label_y = button->rect.y + (button->rect.h - button->label->rect.h) / 2;
-    Label_SetPosition(button->label, label_x, label_y);
-
-    button->on_click = on_click;
-    button->color = color;
-    button->hovering_color = hovering_color;
-    button->hovering = SDL_FALSE;
-    button->clicked = SDL_FALSE;
-
     return button;
 }
 
@@ -43,12 +41,12 @@ void Button_Draw(Button* button, SDL_Renderer* renderer) {
     if (button->hovering) {
         SDL_SetRenderDrawColor(renderer, button->hovering_color.r, button->hovering_color.g, button->hovering_color.b, button->hovering_color.a);
         SDL_RenderFillRect(renderer, &button->rect);
-        Label_SetColor(button->label, renderer, button->color);
+        Label_SetColor(button->label, &button->color);
     }
     else {
         SDL_SetRenderDrawColor(renderer, button->color.r, button->color.g, button->color.b, button->color.a);
         SDL_RenderFillRect(renderer, &button->rect);
-        Label_SetColor(button->label, renderer, button->hovering_color);
+        Label_SetColor(button->label, &button->hovering_color);
     }
 
     Label_Draw(button->label, renderer);
