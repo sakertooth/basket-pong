@@ -1,0 +1,19 @@
+#pragma once
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
+struct Label {
+    SDL_Rect rect;
+    SDL_Texture* texture;
+    TTF_Font* const* font;
+    SDL_Color color;
+    char *text;
+};
+
+typedef struct Label Label;
+
+Label* Label_Create(const char *text, int x, int y, TTF_Font* const* font, const SDL_Color* color);
+void Label_Draw(Label* label, SDL_Renderer* renderer);
+void Label_SetColor(Label* label, const SDL_Color* color);
+void Label_SetText(Label* label, const char* text);
+void Label_Free(Label* label);
