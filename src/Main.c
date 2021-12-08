@@ -1,10 +1,8 @@
 #include "Game.h"
 #include <time.h>
 
-Game *game = NULL;
-
 int main() {
-    game = Game_Init();
+    Game *game = Game_Init();
     if (game == NULL) {
         fprintf(stderr, "Failed to start game: %s", SDL_GetError());
         return EXIT_FAILURE;
@@ -19,18 +17,18 @@ int main() {
             switch (event.type) {
                 case SDL_QUIT:
                     game->running = SDL_FALSE;
-                    Game_Exit();
+                    Game_Exit(game);
                     return EXIT_SUCCESS;
                 default:
                     break;
             }
 
-            Game_HandleEvent(&event);
+            Game_HandleEvent(game, &event);
         }
 
         Uint32 start = SDL_GetTicks();
-        Game_Draw();
+        Game_Draw(game);
         Uint32 end = SDL_GetTicks();
-        Game_Update((float) (end - start) / 1000);
+        Game_Update(game, (float) (end - start) / 1000);
     }
 }

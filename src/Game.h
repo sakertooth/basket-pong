@@ -5,6 +5,7 @@
 #include "states/PlayState.h"
 #include "states/GameOverState.h"
 
+#define GAME_TITLE "Basket Pong"
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
@@ -20,10 +21,9 @@ struct Game {
 };
 
 typedef struct Game Game;
-extern Game* game;
 
 Game* Game_Init();
-void Game_Draw();
-void Game_HandleEvent(SDL_Event *event);
-void Game_Update(float delta_time);
-void Game_Exit();
+void Game_Draw(Game *game);
+void Game_HandleEvent(Game *game, SDL_Event *event);
+void Game_Update(Game *game, float delta_time);
+void Game_Exit(Game *game);

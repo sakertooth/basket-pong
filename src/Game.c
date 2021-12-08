@@ -10,7 +10,7 @@ Game* Game_Init() {
         return NULL;
     }
 
-    game->window = SDL_CreateWindow("Basket Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    game->window = SDL_CreateWindow(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (game->window == NULL) {
         goto error1;
     }
@@ -29,7 +29,6 @@ Game* Game_Init() {
     game->mainmenu_state = NULL;
     game->play_state = NULL;
     game->current_state = -1;
-
     return game;
 
 error3:
@@ -42,7 +41,7 @@ error1:
 }
 
 
-void Game_Draw() {
+void Game_Draw(Game *game) {
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 0);
     SDL_RenderClear(game->renderer);
 
@@ -63,7 +62,7 @@ void Game_Draw() {
     SDL_RenderPresent(game->renderer);
 }
 
-void Game_HandleEvent(SDL_Event *event) {
+void Game_HandleEvent(Game *game, SDL_Event *event) {
     switch (game->current_state) {
         case MAINMENUSTATE_ID:
             MainMenuState_HandleEvent(game->mainmenu_state, event);
@@ -76,7 +75,7 @@ void Game_HandleEvent(SDL_Event *event) {
     }
 }
 
-void Game_Update(float delta_time) {
+void Game_Update(Game *game, float delta_time) {
     switch (game->current_state) {
         case MAINMENUSTATE_ID:
             MainMenuState_Update(game->mainmenu_state);
@@ -93,7 +92,7 @@ void Game_Update(float delta_time) {
 }
 
 
-void Game_Exit() {
+void Game_Exit(Game *game) {
     game->running = SDL_FALSE;
     MainMenuState_Free(game->mainmenu_state);
     PlayState_Free(game->play_state);
