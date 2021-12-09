@@ -42,6 +42,10 @@ void GameOverState_Update(GameOverState* state) {
     Button_Update(state->go_back_button);
 }
 
+void GameOverState_SetText(GameOverState* state, const char *text) {
+    Label_SetText(state->winning_player_label, text);
+}
+
 void GameOverState_Draw(GameOverState* state, SDL_Renderer *renderer) {
     Label_Draw(state->winning_player_label, renderer);
     Button_Draw(state->go_back_button, renderer);
