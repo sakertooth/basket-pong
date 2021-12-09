@@ -11,19 +11,21 @@ GameOverState* GameOverState_Create(Fonts* fonts, SDL_Renderer* renderer, int *c
     SDL_Color color_white = {255, 255, 255, 0};
     SDL_Color color_black = {0, 0, 0, 0};
 
-    state->winning_player_label = Label_Create("", 0, 0, fonts->large_font, &color_white, renderer);
-    if (state->winning_player_label == NULL) {
+    Label *winning_player_label = Label_Create(".", 0, 0, fonts->large_font, &color_white, renderer);
+    if (winning_player_label == NULL) {
         goto cleanup1;
     }
 
+    state->winning_player_label = winning_player_label;
     state->winning_player_label->rect.x = SCREEN_WIDTH / 2 - state->winning_player_label->rect.w / 2;
     state->winning_player_label->rect.y = SCREEN_HEIGHT / 2 - state->winning_player_label->rect.h / 2 - 100;
     
-    state->go_back_button = Button_Create("Go back", 0, 0, GoBackButton_OnClick, current_state, fonts->large_font, &color_black, &color_white, renderer);
-    if (state->go_back_button == NULL) {
+    Button* go_back_button = Button_Create("Go back", 0, 0, GoBackButton_OnClick, current_state, fonts->large_font, &color_black, &color_white, renderer);
+    if (go_back_button == NULL) {
         goto cleanup2;
     }
-    
+
+    state->go_back_button = go_back_button;
     Button_SetPosition(state->go_back_button, SCREEN_WIDTH / 2 - state->go_back_button->rect.w / 2, SCREEN_HEIGHT / 2 - state->go_back_button->rect.h / 2);
     return state;
 
