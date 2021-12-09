@@ -18,8 +18,15 @@ add_executable(basketpong   src/Main.c
 
 target_compile_options(basketpong PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Werror>
 )
+
+if (${CMAKE_BUILD_TYPE} EQUAL "Debug")
+    target_compile_options(basketpong PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/DEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-g3>
+    )
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
