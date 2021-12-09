@@ -61,6 +61,9 @@ void Label_Configure(Label* label, const char *text, const SDL_Color* color) {
         return;
     }
 
+    label->rect.w = surface->w;
+    label->rect.h = surface->h;
+
     SDL_FreeSurface(surface);
     label->texture = texture;
 }

@@ -61,7 +61,7 @@ void PlayState_Draw(PlayState *state, SDL_Renderer *renderer) {
     Label_Draw(state->scoreboard_separator, renderer);
 }
 
-void PlayState_Update(PlayState *state, int *current_state, float delta_time) {
+void PlayState_Update(PlayState *state, GameOverState *game_over_state, int *current_state, float delta_time) {
     Player_Update(state->player_one, state->ball, delta_time);
     Player_Update(state->player_two, state->ball, delta_time);
     Ball_Update(state->ball, delta_time);
@@ -84,9 +84,13 @@ void PlayState_Update(PlayState *state, int *current_state, float delta_time) {
 
     if (state->player_one_score == WINNING_SCORE) {
         *current_state = GAMEOVERSTATE_ID;
+        PlayState_Reset(state);
+        GameOverState_SetText(game_over_state, "Player One Wins!");
     }
     else if (state->player_two_score == WINNING_SCORE) {
         *current_state = GAMEOVERSTATE_ID;
+        PlayState_Reset(state);
+        GameOverState_SetText(game_over_state, "Player Two Wins!");
     }
 }
 
@@ -103,6 +107,36 @@ void PlayState_OnScore(int score, Ball* ball, Label *label) {
     Label_SetColor(label, &color_white);  
 
     free(score_buf);  
+}
+
+void PlayState_Reset(PlayState *state) {
+    state->player_one_score = 0;
+    state->player_two_score = 0;
+    state->player_one->has_ball = SDL_FALSE;
+    state->player_one->is_shooting = SDL_FALSE;
+    state->player_one->jumping = SDL_FALSE;
+    state->player_one->facing_right = SDL_TRUE;
+    state->player_one->vel_y = 0;
+
+    Label_SetText(state->player_one_score_label, "0");
+    Label_SetText(state->player_two_score_label, "0");
+
+    state->player_one->pos_x = 50;
+    state->player_one->pos_y = SCREEN_FLOOR - PLAYER_HEIGHT;
+
+    state->player_two->pos_x = SCREEN_WIDTH - PLAYER_WIDTH - 50;
+    state->player_two->pos_y  = SCREEN_FLOOR - PLAYER_HEIGHT;
+    state->player_two->has_ball = SDL_FALSE;
+    state->player_two->is_shooting = SDL_FALSE;
+    state->player_two->jumping = SDL_FALSE;
+    state->player_two->facing_right = SDL_FALSE;
+    state->player_two->vel_y = 0;
+
+    state->ball->pos_x = SCREEN_WIDTH / 2 - BALL_SIZE;
+    state->ball->pos_y = SCREEN_HEIGHT - BALL_SIZE - 5;
+    state->ball->vel_x = 0;
+    state->ball->vel_y = 0;
+
 }
 
 void PlayState_Free(PlayState *state) {

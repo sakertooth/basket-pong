@@ -102,7 +102,7 @@ void Game_Update(Game *game, float delta_time) {
             MainMenuState_Update(game->mainmenu_state);
             break;
         case PLAYSTATE_ID:
-            PlayState_Update(game->play_state, &game->current_state, delta_time);
+            PlayState_Update(game->play_state, game->gameover_state, &game->current_state, delta_time);
             break;
         case GAMEOVERSTATE_ID:
             GameOverState_Update(game->gameover_state);
