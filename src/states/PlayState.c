@@ -1,7 +1,7 @@
 #include "PlayState.h"
 #include "Game.h"
 
-PlayState *PlayState_Create() {
+PlayState *PlayState_Create(Fonts* fonts, SDL_Renderer *renderer) {
     PlayState *play_state = malloc(sizeof(PlayState));
     if (play_state == NULL) {
         return NULL;
@@ -16,51 +16,52 @@ PlayState *PlayState_Create() {
 
     SDL_Color color_white = {255, 255, 255, 0};
 
-    play_state->player_one_score_label = Label_Create("0", 0, 0, game->fonts->large_font, game->renderer, color_white);
+    play_state->player_one_score_label = Label_Create("0", 0, 0, fonts->large_font, &color_white, renderer);
     play_state->player_one_score_label->rect.x = SCREEN_WIDTH / 2 - play_state->player_one_score_label->rect.x - 100;
     play_state->player_one_score_label->rect.y = SCREEN_HEIGHT / 2 - play_state->player_one_score_label->rect.y - 200;
 
-    play_state->player_two_score_label = Label_Create("0", 0, 0, game->fonts->large_font, game->renderer, color_white);
+    play_state->player_two_score_label = Label_Create("0", 0, 0, fonts->large_font, &color_white, renderer);
     play_state->player_two_score_label->rect.x = SCREEN_WIDTH / 2 - play_state->player_two_score_label->rect.x + 100;
     play_state->player_two_score_label->rect.y = SCREEN_HEIGHT / 2 - play_state->player_two_score_label->rect.y - 200;
 
-    play_state->player_one_score_indicator = Label_Create("Player 1", 0, 0, game->fonts->medium_font, game->renderer, color_white);
+    play_state->player_one_score_indicator = Label_Create("Player 1", 0, 0, fonts->medium_font, &color_white, renderer);
     play_state->player_one_score_indicator->rect.x = play_state->player_one_score_label->rect.x + (play_state->player_one_score_label->rect.w - play_state->player_one_score_indicator->rect.w) / 2;
     play_state->player_one_score_indicator->rect.y = play_state->player_one_score_label->rect.y - play_state->player_one_score_label->rect.h / 2 - 10;
 
-    play_state->player_two_score_indicator = Label_Create("Player 2", 0, 0, game->fonts->medium_font, game->renderer, color_white);
+    play_state->player_two_score_indicator = Label_Create("Player 2", 0, 0, fonts->medium_font, &color_white, renderer);
     play_state->player_two_score_indicator->rect.x = play_state->player_two_score_label->rect.x + (play_state->player_two_score_label->rect.w - play_state->player_two_score_indicator->rect.w) / 2;
     play_state->player_two_score_indicator->rect.y = play_state->player_two_score_label->rect.y - play_state->player_two_score_label->rect.h / 2 - 10;
     
     int scoreboard_separator_x = play_state->player_one_score_label->rect.x + (play_state->player_two_score_label->rect.x - play_state->player_one_score_label->rect.x) / 2;
     int scoreboard_separator_y = play_state->player_one_score_label->rect.y + (play_state->player_one_score_label->rect.h / 2) - 50;
-    play_state->scoreboard_separator = Label_Create("|", scoreboard_separator_x, scoreboard_separator_y, game->fonts->small_font, game->renderer, color_white);
+    play_state->scoreboard_separator = Label_Create("|", scoreboard_separator_x, scoreboard_separator_y, fonts->small_font, &color_white, renderer);
     play_state->scoreboard_separator->rect.h = 100;
 
-    play_state->player_one_indicator = Label_Create("1", play_state->player_one->pos_x, play_state->player_one->pos_y, game->fonts->medium_font, game->renderer, color_white);
-    play_state->player_two_indicator = Label_Create("2", play_state->player_two->pos_x, play_state->player_two->pos_y, game->fonts->medium_font, game->renderer, color_white);
+    play_state->player_one_indicator = Label_Create("1", play_state->player_one->pos_x, play_state->player_one->pos_y, fonts->medium_font, &color_white, renderer);
+    play_state->player_two_indicator = Label_Create("2", play_state->player_two->pos_x, play_state->player_two->pos_y, fonts->medium_font, &color_white, renderer);
 
     play_state->player_one_score = 0;
     play_state->player_two_score = 0;
+    play_state->active_renderer = renderer;
     return play_state;
 }
 
-void PlayState_Draw(PlayState *state) {
-    Player_Draw(state->player_one, game->renderer);
-    Player_Draw(state->player_two, game->renderer);
-    Ball_Draw(state->ball, game->renderer);
-    Net_Draw(state->player_one_net, game->renderer);
-    Net_Draw(state->player_two_net, game->renderer);
-    Label_Draw(state->player_one_score_label, game->renderer);
-    Label_Draw(state->player_two_score_label, game->renderer);
-    Label_Draw(state->player_one_indicator, game->renderer);
-    Label_Draw(state->player_two_indicator, game->renderer);
-    Label_Draw(state->player_one_score_indicator, game->renderer);
-    Label_Draw(state->player_two_score_indicator, game->renderer);
-    Label_Draw(state->scoreboard_separator, game->renderer);
+void PlayState_Draw(PlayState *state, SDL_Renderer *renderer) {
+    Player_Draw(state->player_one, renderer);
+    Player_Draw(state->player_two, renderer);
+    Ball_Draw(state->ball, renderer);
+    Net_Draw(state->player_one_net, renderer);
+    Net_Draw(state->player_two_net, renderer);
+    Label_Draw(state->player_one_score_label, renderer);
+    Label_Draw(state->player_two_score_label, renderer);
+    Label_Draw(state->player_one_indicator, renderer);
+    Label_Draw(state->player_two_indicator, renderer);
+    Label_Draw(state->player_one_score_indicator, renderer);
+    Label_Draw(state->player_two_score_indicator, renderer);
+    Label_Draw(state->scoreboard_separator, renderer);
 }
 
-void PlayState_Update(PlayState *state, float delta_time) {
+void PlayState_Update(PlayState *state, int *current_state, float delta_time) {
     Player_Update(state->player_one, state->ball, delta_time);
     Player_Update(state->player_two, state->ball, delta_time);
     Ball_Update(state->ball, delta_time);
@@ -82,10 +83,10 @@ void PlayState_Update(PlayState *state, float delta_time) {
     }
 
     if (state->player_one_score == WINNING_SCORE) {
-        PlayState_EndGame("Player one");
+        *current_state = GAMEOVERSTATE_ID;
     }
     else if (state->player_two_score == WINNING_SCORE) {
-        PlayState_EndGame("Player two");
+        *current_state = GAMEOVERSTATE_ID;
     }
 }
 
@@ -94,19 +95,14 @@ void PlayState_OnScore(int score, Ball* ball, Label *label) {
     ball->vel_y /= 2;
 
     int ndigits = snprintf(NULL, 0, "%d", score);
-    char score_buf[ndigits + 1];
+    char *score_buf = malloc(ndigits + 1);
     sprintf(score_buf, "%d", score);
 
     SDL_Color color_white = {255, 255, 255, 0};
-    Label_SetText(label, game->renderer, score_buf);
-    Label_SetColor(label, game->renderer, color_white);    
-}
+    Label_SetText(label, score_buf);
+    Label_SetColor(label, &color_white);  
 
-void PlayState_EndGame(char *winning_player) {
-    PlayState_Free(game->play_state);
-    game->play_state = NULL;
-    game->gameover_state = GameOverState_Create(winning_player, game->renderer);
-    game->current_state = GAMEOVERSTATE_ID;
+    free(score_buf);  
 }
 
 void PlayState_Free(PlayState *state) {

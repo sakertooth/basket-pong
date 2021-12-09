@@ -10,8 +10,9 @@ typedef struct GameOverState {
     Button* go_back_button;
 } GameOverState;
 
-GameOverState* GameOverState_Create(char* winning_player, Fonts* fonts, SDL_Renderer* renderer);
+GameOverState* GameOverState_Create(Fonts* fonts, SDL_Renderer* renderer, int* current_state);
 void GameOverState_HandleEvent(GameOverState *state, SDL_Event *event);
 void GameOverState_Update(GameOverState* state);
 void GameOverState_Draw(GameOverState* state, SDL_Renderer *renderer);
+void GameOverState_Free(GameOverState* state);
 void GoBackButton_OnClick();

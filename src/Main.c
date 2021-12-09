@@ -1,34 +1,37 @@
 #include "Game.h"
-#include <time.h>
 
-int main() {
-    Game *game = Game_Init();
-    if (game == NULL) {
-        fprintf(stderr, "Failed to start game: %s", SDL_GetError());
+int main(int argc, char **argv) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "Failed to initalize SDL. %s\n.", SDL_GetError());
         return EXIT_FAILURE;
     }
 
-    game->mainmenu_state = MainMenuState_Create(game->renderer);
+    if (TTF_Init() < 0) {
+        fprintf(stderr, "Failed to initialize TTF. %s\n", TTF_GetError());
+        return EXIT_FAILURE;
+    }
+
+    Game* game = Game_Create();
+    if (game == NULL) {
+        fprintf(stderr, "Failed to start game.");
+        return EXIT_FAILURE;
+    }
+
     game->current_state = MAINMENUSTATE_ID;
 
+    Uint32 last = SDL_GetTicks();
     while (game->running) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    game->running = SDL_FALSE;
-                    Game_Exit(game);
-                    return EXIT_SUCCESS;
-                default:
-                    break;
-            }
 
-            Game_HandleEvent(game, &event);
-        }
+        Uint32 now = SDL_GetTicks();
+        float delta_time = (float) (now - last) / 1000;
+        last = now;
 
-        Uint32 start = SDL_GetTicks();
+        Game_HandleEvent(game);
+        Game_Update(game, delta_time);
         Game_Draw(game);
-        Uint32 end = SDL_GetTicks();
-        Game_Update(game, (float) (end - start) / 1000);
     }
+
+    Game_Exit(game);
+    SDL_Quit();
+    TTF_Quit();
 }

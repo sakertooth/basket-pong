@@ -3,6 +3,7 @@
 #include "objects/Ball.h"
 #include "objects/Net.h"
 #include "gui/Label.h"
+#include "gui/Fonts.h"
 
 #define PLAYSTATE_ID 1
 #define SCREEN_FLOOR SCREEN_HEIGHT - 5
@@ -20,14 +21,14 @@ typedef struct PlayState {
     Label* player_one_indicator;
     Label* player_two_indicator;
     Label* scoreboard_separator;
+    SDL_Renderer* active_renderer;
     int player_one_score;
     int player_two_score;
     Ball* ball;
 } PlayState;
 
-PlayState *PlayState_Create();
-void PlayState_Draw(PlayState *state);
-void PlayState_Update(PlayState *state, float delta_time);
+PlayState *PlayState_Create(Fonts* fonts, SDL_Renderer *renderer);
+void PlayState_Draw(PlayState *state, SDL_Renderer *renderer);
+void PlayState_Update(PlayState *state, int *current_state, float delta_time);
 void PlayState_OnScore(int score, Ball* ball, Label *label);
 void PlayState_Free(PlayState *state);
-void PlayState_EndGame(char *winning_player);

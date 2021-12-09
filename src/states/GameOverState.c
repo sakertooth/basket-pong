@@ -2,43 +2,33 @@
 #include "Game.h"
 #include <stdlib.h>
 
-GameOverState* GameOverState_Create(char* winning_player, Fonts* fonts, SDL_Renderer* renderer) {
+GameOverState* GameOverState_Create(Fonts* fonts, SDL_Renderer* renderer, int *current_state) {
     GameOverState* state = malloc(sizeof(GameOverState));
     if (state == NULL) {
         return NULL;
     }
-
-    char *win_str = malloc(strlen(winning_player) + 10 /* has won!\0*/);
-    if (win_str == NULL) {
-        goto cleanup1;
-    }
-
-    sprintf(win_str, "%s has won!", winning_player);
  
     SDL_Color color_white = {255, 255, 255, 0};
     SDL_Color color_black = {0, 0, 0, 0};
 
-    state->winning_player_label = Label_Create(win_str, 0, 0, fonts->large_font, &color_white, renderer);
+    state->winning_player_label = Label_Create("", 0, 0, fonts->large_font, &color_white, renderer);
+    if (state->winning_player_label == NULL) {
+        goto cleanup1;
+    }
+
     state->winning_player_label->rect.x = SCREEN_WIDTH / 2 - state->winning_player_label->rect.w / 2;
     state->winning_player_label->rect.y = SCREEN_HEIGHT / 2 - state->winning_player_label->rect.h / 2 - 100;
     
-    if (state->winning_player_label == NULL) {
+    state->go_back_button = Button_Create("Go back", 0, 0, GoBackButton_OnClick, current_state, fonts->large_font, &color_black, &color_white, renderer);
+    if (state->go_back_button == NULL) {
         goto cleanup2;
     }
-
-    state->go_back_button = Button_Create("Go back", 0, 0, GoBackButton_OnClick, fonts->large_font, &color_black, &color_white, renderer);
+    
     Button_SetPosition(state->go_back_button, SCREEN_WIDTH / 2 - state->go_back_button->rect.w / 2, SCREEN_HEIGHT / 2 - state->go_back_button->rect.h / 2);
-
-    if (state->go_back_button == NULL) {
-        goto cleanup3;
-    }
-
     return state;
 
-cleanup3:
-    Label_Free(state->winning_player_label);
 cleanup2:
-    free(win_str);
+    Label_Free(state->winning_player_label);
 cleanup1:
     free(state);
     return NULL;
@@ -66,11 +56,7 @@ void GameOverState_Free(GameOverState* state) {
     Button_Free(state->go_back_button);
 }
 
-void GoBackButton_OnClick() {
-    /**
-        GameOverState_Free(game->gameover_state);
-        game->gameover_state = NULL;
-        game->mainmenu_state = MainMenuState_Create();
-        game->current_state = MAINMENUSTATE_ID;
-    **/
+void GoBackButton_OnClick(void *arg) {
+    int *current_state = (int*) arg;
+    *current_state = MAINMENUSTATE_ID;
 }

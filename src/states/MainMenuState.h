@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "gui/Label.h"
 #include "gui/Button.h"
+#include "gui/Fonts.h"
 
 #define MAINMENUSTATE_ID 0
 
@@ -13,7 +14,7 @@ struct MainMenuState {
 
 typedef struct MainMenuState MainMenuState;
 
-MainMenuState *MainMenuState_Create();
+MainMenuState *MainMenuState_Create(Fonts* fonts, SDL_Renderer* renderer, int *current_state);
 void MainMenuState_Draw(MainMenuState* state, SDL_Renderer* renderer);
 void MainMenuState_HandleEvent(MainMenuState *state, SDL_Event *event);
 void MainMenuState_Update(MainMenuState* state);

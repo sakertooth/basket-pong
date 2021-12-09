@@ -22,8 +22,8 @@ struct Game {
 
 typedef struct Game Game;
 
-Game* Game_Init();
+Game* Game_Create();
 void Game_Draw(Game *game);
-void Game_HandleEvent(Game *game, SDL_Event *event);
+void Game_HandleEvent(Game *game);
 void Game_Update(Game *game, float delta_time);
 void Game_Exit(Game *game);
