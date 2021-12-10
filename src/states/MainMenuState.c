@@ -58,5 +58,5 @@ void MainMenuState_Free(MainMenuState *state) {
 }
 
 void OnPlayButton_Click() {
-    Game_SwitchScene(PLAYSTATE_ID);
+    Game_SwitchState(PLAYSTATE_ID);
 }

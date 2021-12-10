@@ -61,5 +61,5 @@ void GameOverState_Free(GameOverState* state) {
 }
 
 void GoBackButton_OnClick() {
-    Game_SwitchScene(MAINMENUSTATE_ID);
+    Game_SwitchState(MAINMENUSTATE_ID);
 }

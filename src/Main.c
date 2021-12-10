@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    Game_SwitchScene(MAINMENUSTATE_ID);
+    Game_SwitchState(MAINMENUSTATE_ID);
 
     Uint32 last = SDL_GetTicks();
     while (basket_pong_game->running) {

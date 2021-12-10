@@ -82,11 +82,11 @@ void PlayState_Update(PlayState *state, float delta_time) {
     }
 
     if (state->player_one_score == WINNING_SCORE) {
-        Game_SwitchScene(GAMEOVERSTATE_ID);
+        Game_SwitchState(GAMEOVERSTATE_ID);
         Label_SetText(basket_pong_game->gameover_state->winning_player_label, "Player One Wins!", SDL_TRUE);
     }
     else if (state->player_two_score == WINNING_SCORE) {
-        Game_SwitchScene(GAMEOVERSTATE_ID);
+        Game_SwitchState(GAMEOVERSTATE_ID);
         Label_SetText(basket_pong_game->gameover_state->winning_player_label, "Player Two Wins!", SDL_TRUE);
     }
 }
