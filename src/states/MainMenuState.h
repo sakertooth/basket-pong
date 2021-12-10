@@ -14,8 +14,8 @@ struct MainMenuState {
 
 typedef struct MainMenuState MainMenuState;
 
-MainMenuState *MainMenuState_Create(Fonts* fonts, SDL_Renderer* renderer, int *current_state);
-void MainMenuState_Draw(MainMenuState* state, SDL_Renderer* renderer);
+MainMenuState *MainMenuState_Create();
+void MainMenuState_Draw(MainMenuState* state, SDL_Renderer *renderer);
 void MainMenuState_HandleEvent(MainMenuState *state, SDL_Event *event);
 void MainMenuState_Update(MainMenuState* state);
 void MainMenuState_Free(MainMenuState* state);

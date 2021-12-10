@@ -28,9 +28,9 @@ typedef struct PlayState {
     Ball* ball;
 } PlayState;
 
-PlayState *PlayState_Create(Fonts* fonts, SDL_Renderer *renderer);
+PlayState *PlayState_Create();
 void PlayState_Draw(PlayState *state, SDL_Renderer *renderer);
-void PlayState_Update(PlayState *state, GameOverState *game_over_state, int *current_state, float delta_time);
+void PlayState_Update(PlayState *state, float delta_time);
 void PlayState_OnScore(int score, Ball* ball, Label *label);
 void PlayState_Reset(PlayState *state);
 void PlayState_Free(PlayState *state);

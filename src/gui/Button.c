@@ -1,7 +1,7 @@
 #include "Button.h"
 #include "Game.h"
 
-Button* Button_Create(const char* text, int x, int y, void (*on_click)(void *), void *arg, TTF_Font* font, SDL_Color* color, SDL_Color* hovering_color, SDL_Renderer* renderer) {
+Button* Button_Create(const char* text, int x, int y, void (*on_click)(void *), TTF_Font* font, SDL_Color* color, SDL_Color* hovering_color, SDL_Renderer* renderer) {
     Button* button = malloc(sizeof(Button));
     if (button == NULL) {
         return NULL;
@@ -14,7 +14,6 @@ Button* Button_Create(const char* text, int x, int y, void (*on_click)(void *), 
     }
 
     button->on_click = on_click;
-    button->on_click_arg = arg;
 
     button->color = *color;
     button->hovering_color = *hovering_color;
@@ -56,7 +55,7 @@ void Button_Draw(Button* button, SDL_Renderer* renderer) {
 
 void Button_HandleEvent(Button* button, SDL_Event *event) {
     if (event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
-        button->on_click(button->on_click_arg);
+        button->on_click();
     }
 }
 

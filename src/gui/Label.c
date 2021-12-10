@@ -73,12 +73,18 @@ void Label_SetColor(Label* label, const SDL_Color* color) {
     label->color = *color;
 }
 
-void Label_SetText(Label* label, const char* text) {
+void Label_SetText(Label* label, const char* text, SDL_bool maintain_center) {
     if (text == NULL || strcmp(label->text, text) == 0) {
         return;
     }
 
+    int x = label->rect.x;
     Label_Configure(label, text, &label->color);
+
+    if (maintain_center) {
+        label->rect.x = x - label->rect.w / 2;
+    }
+
     free(label->text);
     label->text = SDL_strdup(text);
 }

@@ -17,13 +17,16 @@ struct Game {
     PlayState* play_state;
     MainMenuState* mainmenu_state;
     GameOverState* gameover_state;
-    int current_state;
+    int current_state_id;
 };
 
 typedef struct Game Game;
 
+extern Game *basket_pong_game;
+
 Game* Game_Create();
-void Game_Draw(Game *game);
-void Game_HandleEvent(Game *game);
-void Game_Update(Game *game, float delta_time);
-void Game_Exit(Game *game);
+void Game_Draw();
+void Game_HandleEvent();
+void Game_SwitchState(int state_id);
+void Game_Update(float delta_time);
+void Game_Exit();

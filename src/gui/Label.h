@@ -16,5 +16,5 @@ typedef struct Label Label;
 Label* Label_Create(const char *text, int x, int y, TTF_Font* font, SDL_Color* color, SDL_Renderer* renderer);
 void Label_Draw(Label* label, SDL_Renderer* renderer);
 void Label_SetColor(Label* label, const SDL_Color* color);
-void Label_SetText(Label* label, const char* text);
+void Label_SetText(Label* label, const char* text, SDL_bool maintain_center);
 void Label_Free(Label* label);

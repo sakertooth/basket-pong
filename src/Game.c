@@ -22,11 +22,11 @@ Game* Game_Create() {
     }
     
     game->running = SDL_TRUE;
-    game->current_state = -1;
+    game->current_state_id = -1;
 
-    game->mainmenu_state = MainMenuState_Create(fonts, renderer, &game->current_state);
-    game->play_state = PlayState_Create(fonts, renderer);
-    game->gameover_state = GameOverState_Create(fonts, renderer, &game->current_state);
+    game->mainmenu_state = NULL;
+    game->play_state = NULL;
+    game->gameover_state = NULL;
  
     game->window = window;
     game->renderer = renderer;
@@ -42,49 +42,49 @@ error1:
     return NULL;
 }
 
-void Game_Draw(Game *game) {
-    if (!game->running) {
+void Game_Draw() {
+    if (!basket_pong_game->running) {
         return;
     }
 
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 0);
-    SDL_RenderClear(game->renderer);
+    SDL_SetRenderDrawColor(basket_pong_game->renderer, 0, 0, 0, 0);
+    SDL_RenderClear(basket_pong_game->renderer);
 
-    switch (game->current_state) {
+    switch (basket_pong_game->current_state_id) {
         case MAINMENUSTATE_ID:
-            MainMenuState_Draw(game->mainmenu_state, game->renderer);
+            MainMenuState_Draw(basket_pong_game->mainmenu_state, basket_pong_game->renderer);
             break;
         case PLAYSTATE_ID:
-            PlayState_Draw(game->play_state, game->renderer);
+            PlayState_Draw(basket_pong_game->play_state, basket_pong_game->renderer);
             break;
         case GAMEOVERSTATE_ID:
-            GameOverState_Draw(game->gameover_state, game->renderer);
+            GameOverState_Draw(basket_pong_game->gameover_state, basket_pong_game->renderer);
             break;
         default:
             break;
     }
     
-    SDL_RenderPresent(game->renderer);
+    SDL_RenderPresent(basket_pong_game->renderer);
 }
 
-void Game_HandleEvent(Game *game) {
-    if (!game->running) {
+void Game_HandleEvent() {
+    if (!basket_pong_game->running) {
         return;
     }
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            game->running = SDL_FALSE;
+            basket_pong_game->running = SDL_FALSE;
             return;
         }
 
-        switch (game->current_state) {
+        switch (basket_pong_game->current_state_id) {
             case MAINMENUSTATE_ID:
-                MainMenuState_HandleEvent(game->mainmenu_state, &event);
+                MainMenuState_HandleEvent(basket_pong_game->mainmenu_state, &event);
                 break;
             case GAMEOVERSTATE_ID:
-                GameOverState_HandleEvent(game->gameover_state, &event);
+                GameOverState_HandleEvent(basket_pong_game->gameover_state, &event);
                 break;
             default:
                 break;
@@ -92,32 +92,66 @@ void Game_HandleEvent(Game *game) {
     }
 }
 
-void Game_Update(Game *game, float delta_time) {
-    if (!game->running) {
+void Game_Update(float delta_time) {
+    if (!basket_pong_game->running) {
         return;
     }
 
-    switch (game->current_state) {
+    switch (basket_pong_game->current_state_id) {
         case MAINMENUSTATE_ID:
-            MainMenuState_Update(game->mainmenu_state);
+            MainMenuState_Update(basket_pong_game->mainmenu_state);
             break;
         case PLAYSTATE_ID:
-            PlayState_Update(game->play_state, game->gameover_state, &game->current_state, delta_time);
+            PlayState_Update(basket_pong_game->play_state, delta_time);
             break;
         case GAMEOVERSTATE_ID:
-            GameOverState_Update(game->gameover_state);
+            GameOverState_Update(basket_pong_game->gameover_state);
             break;
         default:
             break;
     }
 }
 
-void Game_Exit(Game *game) {
-    MainMenuState_Free(game->mainmenu_state);
-    PlayState_Free(game->play_state);
-    GameOverState_Free(game->gameover_state);    
-    SDL_DestroyRenderer(game->renderer);
-    SDL_DestroyWindow(game->window);
-    Fonts_Free(game->fonts);
-    free(game);
+void Game_SwitchState(int state_id) {
+    switch (basket_pong_game->current_state_id) {
+        case MAINMENUSTATE_ID:
+            MainMenuState_Free(basket_pong_game->mainmenu_state);
+            basket_pong_game->mainmenu_state = NULL;
+            break;
+        case PLAYSTATE_ID:
+            PlayState_Free(basket_pong_game->play_state);
+            basket_pong_game->play_state = NULL;
+            break;
+        case GAMEOVERSTATE_ID:
+            GameOverState_Free(basket_pong_game->gameover_state);
+            basket_pong_game->gameover_state = NULL;
+            break;
+    }
+
+    switch (state_id) {
+        case MAINMENUSTATE_ID:
+            basket_pong_game->mainmenu_state = MainMenuState_Create();
+            basket_pong_game->current_state_id = MAINMENUSTATE_ID;
+            break;
+        case PLAYSTATE_ID:
+            basket_pong_game->play_state = PlayState_Create();
+            basket_pong_game->current_state_id = PLAYSTATE_ID;
+            break;
+        case GAMEOVERSTATE_ID:
+            basket_pong_game->gameover_state = GameOverState_Create();
+            basket_pong_game->current_state_id = GAMEOVERSTATE_ID;
+            break;
+        default:
+            break;
+    }
+}
+
+void Game_Exit() {
+    MainMenuState_Free(basket_pong_game->mainmenu_state);
+    PlayState_Free(basket_pong_game->play_state);
+    GameOverState_Free(basket_pong_game->gameover_state);    
+    SDL_DestroyRenderer(basket_pong_game->renderer);
+    SDL_DestroyWindow(basket_pong_game->window);
+    Fonts_Free(basket_pong_game->fonts);
+    free(basket_pong_game);
 }
