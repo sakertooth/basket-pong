@@ -54,6 +54,7 @@ void Ball_Update(Ball *ball, float delta_time) {
             ball->vel_x = 0;
             ball->shot = SDL_FALSE;
             ball->pos_y = SCREEN_FLOOR - BALL_SIZE;
+            Mix_PlayChannel(-1, basket_pong_game->audio->dribble_sound, 0);
         }
         else {
             ball->vel_y -= BALL_GRAVITY * delta_time;
