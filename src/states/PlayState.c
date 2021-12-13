@@ -75,10 +75,12 @@ void PlayState_Update(PlayState *state, float delta_time) {
 
     if (Net_BallInHoop(state->player_one_net, state->ball)) {
         PlayState_OnScore(++state->player_two_score, state->ball, state->player_two_score_label);
+        Mix_PlayChannel(-1, basket_pong_game->audio->score_sound, 0);
     }
 
     if (Net_BallInHoop(state->player_two_net, state->ball)) {
         PlayState_OnScore(++state->player_one_score, state->ball, state->player_one_score_label);
+        Mix_PlayChannel(-1, basket_pong_game->audio->score_sound, 0);
     }
 
     if (state->player_one_score == WINNING_SCORE) {

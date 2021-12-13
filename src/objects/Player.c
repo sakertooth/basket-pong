@@ -111,7 +111,8 @@ void Player_Update(Player* player, Ball *ball, float delta_time) {
     if (player->has_ball && !player->jumping && !player->is_shooting) {
         if ((int) ball->pos_y + BALL_SIZE >= SCREEN_FLOOR) {
             ball->vel_y = ball->dribble_speed;
-            ball->pos_y = SCREEN_FLOOR - BALL_SIZE;
+            ball->pos_y = SCREEN_FLOOR - BALL_SIZE;       
+            Mix_PlayChannel(-1, basket_pong_game->audio->dribble_sound, 0);
         }
 
         if (ball->pos_y <= (int) player->pos_y + PLAYER_HEIGHT / 2 - 15) {

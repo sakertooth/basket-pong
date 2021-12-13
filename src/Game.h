@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include "Audio.h"
 #include "gui/Fonts.h"
 #include "states/MainMenuState.h"
 #include "states/PlayState.h"
@@ -14,6 +15,7 @@ struct Game {
     SDL_Renderer *renderer;
     SDL_bool running;
     Fonts* fonts;
+    Audio* audio;
     PlayState* play_state;
     MainMenuState* mainmenu_state;
     GameOverState* gameover_state;

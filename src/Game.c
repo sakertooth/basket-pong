@@ -20,6 +20,11 @@ Game* Game_Create() {
     if (fonts == NULL) {
         goto error3;
     }
+
+    Audio *audio = Audio_Create();
+    if (audio == NULL) {
+        goto error4;
+    }
     
     game->running = SDL_TRUE;
     game->current_state_id = -1;
@@ -31,8 +36,11 @@ Game* Game_Create() {
     game->window = window;
     game->renderer = renderer;
     game->fonts = fonts;
+    game->audio = audio;
     return game;
 
+error4:
+    Fonts_Free(fonts);
 error3:
     SDL_DestroyRenderer(game->renderer);
 error2:

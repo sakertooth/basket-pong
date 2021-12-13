@@ -6,6 +6,7 @@ enable_testing()
 
 add_executable(basketpong   src/Main.c 
                             src/Game.c
+                            src/Audio.c
                             src/gui/Fonts.c
                             src/gui/Button.c 
                             src/gui/Label.c
@@ -24,9 +25,10 @@ target_compile_options(basketpong PRIVATE
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 find_package(SDL2TTF REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
-target_include_directories(basketpong PRIVATE src ${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIR})
-target_link_libraries(basketpong ${SDL2_LIBRARIES} ${SDL2TTF_LIBRARY})
+target_include_directories(basketpong PRIVATE src ${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR})
+target_link_libraries(basketpong ${SDL2_LIBRARIES} ${SDL2TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
 
 add_custom_command(TARGET basketpong POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
