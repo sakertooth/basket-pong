@@ -161,5 +161,6 @@ void Game_Exit() {
     SDL_DestroyRenderer(basket_pong_game->renderer);
     SDL_DestroyWindow(basket_pong_game->window);
     Fonts_Free(basket_pong_game->fonts);
+    Audio_Free(basket_pong_game->audio);
     free(basket_pong_game);
 }
