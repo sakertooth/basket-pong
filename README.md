@@ -1,5 +1,8 @@
 # basket-pong
 A basket-ball game made in C using SDL.
+<p align="center">
+  <img src="preview.png" />
+</p>
 
 ## Controls
 WASD keys - Player one movement  
