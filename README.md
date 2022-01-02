@@ -13,3 +13,12 @@ First player with 5 points wins.
   * [SDL2](https://www.libsdl.org/)
   * [SDL_TTF](https://www.libsdl.org/projects/SDL_ttf/)
   * [SDL_Mixer](https://www.libsdl.org/projects/SDL_mixer/)
+
+## Building project
+```
+git clone https://github.com/sakertooth/basket-pong/
+cd basket-pong
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
